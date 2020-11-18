@@ -1,0 +1,4 @@
+#this should also work as documentation on used libraries
+argparse
+tldextract
+ipaddress
