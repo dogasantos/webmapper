@@ -153,7 +153,7 @@ if __name__ == "__main__":
         sys.exit(1)
     if nmapObj:
         #list_of_webservers_found = WebDiscovery(nmapObj, massdnsreport, user_verbose)
-        if os.path.isfile(massdnsreport) == True and os.path.getsize(massdnsreport) > 0:
+        if massdnsreport is not False:
             webhosts=FindWeb(massdnsreport, nmapObj)
         else:
             webhosts=FindWeb(False, nmapObj)
