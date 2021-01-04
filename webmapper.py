@@ -13,6 +13,9 @@ import argparse
 import nmap
 import ipaddress
 
+global CPPATH
+CPPATH=os.path.dirname(os.path.realpath(__file__))
+
 # how nmap tags a web service in the "name" field
 web_service_names = ["http","http-proxy","https","https-alt","ssl"]
 
@@ -141,7 +144,7 @@ if __name__ == "__main__":
     massdnsreport = args.massdns
     output = args.output
 
-
+    print (massdnsreport)
     banner()
     nmapObj = nmap_LoadXmlObject(nmapreport)
 
