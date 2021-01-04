@@ -161,7 +161,7 @@ if __name__ == "__main__":
         else:
             webhosts=FindWeb(False, nmapObj)
 
-        saveFile(output + ".web", webhosts)
+        saveFile(output, webhosts)
         print("[*] Done.")
 
 
