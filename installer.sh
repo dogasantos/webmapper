@@ -21,5 +21,5 @@ install_pynmap
 
 
 echo '#!/bin/bash' > /usr/bin/webmapper
-echo "python3 $workdir/webmapper.py $@" >>  /usr/bin/webmapper
+echo "python3 $workdir/webmapper.py \$@" >> /usr/bin/webmapper
 chmod 755 /usr/bin/webmapper
