@@ -144,7 +144,7 @@ if __name__ == "__main__":
     massdnsreport = args.massdns
     output = args.output
 
-    print (massdnsreport)
+    print(massdnsreport)
     banner()
     nmapObj = nmap_LoadXmlObject(nmapreport)
 
@@ -156,7 +156,7 @@ if __name__ == "__main__":
         sys.exit(1)
     if nmapObj:
         #list_of_webservers_found = WebDiscovery(nmapObj, massdnsreport, user_verbose)
-        if massdnsreport is not False:
+        if massdnsreport:
             webhosts=FindWeb(massdnsreport, nmapObj)
         else:
             webhosts=FindWeb(False, nmapObj)
