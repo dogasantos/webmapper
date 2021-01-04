@@ -144,7 +144,6 @@ if __name__ == "__main__":
     massdnsreport = args.massdns
     output = args.output
 
-    print(massdnsreport)
     banner()
     nmapObj = nmap_LoadXmlObject(nmapreport)
 
