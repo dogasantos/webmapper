@@ -79,12 +79,18 @@ def parseMassdnsStruct(massdnsreport):
 
 def FindWeb(massdnsreport, nmapObj):
     weblist = list()
-    massdnsstruct = parseMassdnsStruct(massdnsreport)
+    if massdnsreport is not False:
+        massdnsstruct = parseMassdnsStruct(massdnsreport)
+    else:
+        massdnsstruct = False
 
     for ip in nmapObj.all_hosts():
         print("  + Parsing target: {}".format(str(ip)))
 
-        vhostlist = getHostnameFromIp(massdnsstruct, ip)
+        if massdnsstruct:
+            vhostlist = getHostnameFromIp(massdnsstruct, ip)
+        else:
+            vhostlist = ''
         openports = nmapObj[ip]['tcp'].keys()
         for port in openports:
             service_details = nmapObj[ip]['tcp'][port]
@@ -123,7 +129,7 @@ def parse_args():
     parser.error = parser_error
     parser._optionals.title = "Options:"
     parser.add_argument('-n', '--nmapreport', help="nmap xml report file", required=True)
-    parser.add_argument('-m', '--massdns', help="massdns report file (ip - hostname) so we can get the proper hostname for each ip address", required=True)
+    parser.add_argument('-m', '--massdns', help="massdns report file (ip - hostname) so we can get the proper hostname for each ip address", required=False)
     parser.add_argument('-o', '--output', help="Output is a text file containing hosts in the format proto://ip-or-host:port (with a .web suffix)", required=False)
     return parser.parse_args()
 
@@ -147,7 +153,11 @@ if __name__ == "__main__":
         sys.exit(1)
     if nmapObj:
         #list_of_webservers_found = WebDiscovery(nmapObj, massdnsreport, user_verbose)
-        webhosts=FindWeb(massdnsreport, nmapObj)
+        if os.path.isfile(massdnsreport) == True and os.path.getsize(massdnsreport) > 0:
+            webhosts=FindWeb(massdnsreport, nmapObj)
+        else:
+            webhosts=FindWeb(False, nmapObj)
+
         saveFile(output + ".web", webhosts)
         print("[*] Done.")
 
