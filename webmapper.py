@@ -101,8 +101,8 @@ def FindWeb(massdnsreport, nmapObj):
                 if wtag == service_details['name']:
                     proto = "http"
                     if service_details['name'] == 'ssl' \
-                            or 'https' in service_details['name'] \
-                            or service_details['tunnel'] == "ssl":
+                            or 'https' in service_details['name'] or "tunnel" in service_details.keys():
+                           
                         proto = "https"
 
                     if len(vhostlist) > 0:
