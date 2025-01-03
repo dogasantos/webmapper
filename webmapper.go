@@ -16,6 +16,19 @@ type Host struct {
 	Hostnames []string
 }
 
+// Remove duplicated elements from slice
+func RemoveDuplicates(elements []string) []string {
+	encountered := map[string]bool{}
+	result := []string{}
+
+	for v := range elements {
+		if encountered[elements[v]] == false {
+			encountered[elements[v]] = true
+			result = append(result, elements[v])
+		}
+	}
+	return result
+}
 func readLines(filename string) ([]string, error) {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -179,6 +192,7 @@ func main() {
 	}
 
 	webServices := findWebServices(nmapResult, hosts)
+	webServices = RemoveDuplicates(webServices)
 
 	if *output != "" {
 		err := saveFile(*output, webServices)
