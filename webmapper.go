@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"flag"
 	"fmt"
+	"net/url"
 	"os"
 	"strings"
 
@@ -47,6 +48,38 @@ func readLines(filename string) ([]string, error) {
 	}
 
 	return lines, nil
+}
+func fixDefaultPorts(webServices []string) []string {
+	var fixedServices []string
+
+	for _, service := range webServices {
+		// Parse the URL
+		u, err := url.Parse(service)
+		if err != nil {
+			// If parsing fails for any reason, keep the original
+			fixedServices = append(fixedServices, service)
+			continue
+		}
+
+		// Split the host into hostname and port (if present)
+		hostParts := strings.Split(u.Host, ":")
+		if len(hostParts) == 2 {
+			// if we have "host:port"
+			port := hostParts[1]
+
+			// Check if it's "http" with port 80
+			// or "https" with port 443
+			if (u.Scheme == "http" && port == "80") ||
+				(u.Scheme == "https" && port == "443") {
+				// Remove the port
+				u.Host = hostParts[0]
+			}
+		}
+
+		fixedServices = append(fixedServices, u.String())
+	}
+
+	return fixedServices
 }
 
 func parseMassdns(lines []string) []Host {
@@ -192,7 +225,7 @@ func main() {
 	}
 
 	webServices := findWebServices(nmapResult, hosts)
-	webServices = RemoveDuplicates(webServices)
+	webServices = RemoveDuplicates(fixDefaultPorts(webServices))
 
 	if *output != "" {
 		err := saveFile(*output, webServices)
