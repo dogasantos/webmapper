@@ -40,12 +40,17 @@ func parseMassdns(lines []string) []Host {
 	var hosts []Host
 	for _, line := range lines {
 		parts := strings.Split(line, " ")
-		if len(parts) < 4 {
+		if len(parts) < 3 {
 			continue
 		}
+		// parts[0] is the hostname, parts[2] is the IP
+		host := strings.TrimSuffix(parts[0], ".") // remove trailing '.'
 		ip := parts[len(parts)-1]
-		host := parts[0]
-		hosts = append(hosts, Host{IPAddress: ip, Hostnames: []string{host}})
+
+		hosts = append(hosts, Host{
+			IPAddress: ip,
+			Hostnames: []string{host},
+		})
 	}
 	return hosts
 }
